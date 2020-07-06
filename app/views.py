@@ -9,7 +9,7 @@ from django.template.defaultfilters import date
 # Create your views here.
 
 def home(request):    
-    return render(request,"index.html",locals())
+    return render(request,"index.html")
     
 @login_required(login_url="/login/")    
 def maison_list(request):
@@ -43,7 +43,7 @@ def new_maison(request):
         photoM2 = photoM2,
         photoM3 = photoM3
         )
-        maison.save()
+      
         
         return redirect("/maisons/")
     
@@ -56,8 +56,7 @@ def new_logement(request, numM):
     maison = get_object_or_404(Maison, pk= numM)
     if form.is_valid():
         form.save(commit=False)
-        superficie = form.cleaned_data.get("superficie")
-        loyer = form.cleaned_data.get("loyer")        
+        superficie = form.cleaned_data.get("superficie")  
         typeL = form.cleaned_data.get("typeL")
         photoL1 = form.cleaned_data.get("photoL1")
         photoL2 = form.cleaned_data.get("photoL2")
@@ -66,7 +65,6 @@ def new_logement(request, numM):
         logement = Logement.objects.create(
             typeL = typeL,
             superficie = superficie,
-            loyer = loyer,
             numM = maison,
             photoL1 = photoL1,
             photoL2 = photoL2,
@@ -122,6 +120,7 @@ def update_maison(request, numM):
         photoM2 = photoM2,
         photoM3 = photoM3
         )
+
                 
         return redirect("/maisons/"+str(numM)+"/details")
     
@@ -180,7 +179,7 @@ def paiement(request, numLogement, numLocataire):
             montantP = montantP
         )
         paiement.save()
-        return redirect("/maisons/logements/"+str(numLogement.numLogement)+"/details/")
+        return redirect("/maisons/"+str(numLogement.numM.numM)+"/logements/"+str(numLogement.numLogement)+"/details/")
     
     return render(request, "mon_bien/maison/logement/paiement.html",locals())
 
@@ -237,8 +236,7 @@ def update_logement(request, numM, numLogement):
     maison = get_object_or_404(Maison, pk= numM)
     if form.is_valid():
         form.save(commit=False)
-        superficie = form.cleaned_data.get("superficie")
-        loyer = form.cleaned_data.get("loyer")        
+        superficie = form.cleaned_data.get("superficie") 
         typeL = form.cleaned_data.get("typeL")
         photoL1 = form.cleaned_data.get("photoL1")
         photoL2 = form.cleaned_data.get("photoL2")
@@ -247,7 +245,6 @@ def update_logement(request, numM, numLogement):
         Logement.objects.filter(pk=numLogement).update(
             typeL = typeL,
             superficie = superficie,
-            loyer = loyer,
             numM = maison,
             photoL1 = photoL1,
             photoL2 = photoL2,
@@ -313,6 +310,7 @@ def create_bail(request, numM, numLogement, numLocataire):
         form.save(commit=False)
         dateDebut = form.cleaned_data.get('dateDebut')
         dateFin = form.cleaned_data.get('dateFin')
+        loyer = form.cleaned_data.get('loyer')
         if( dateDebut > dateFin):
             erreur = True
             return render(request, "mon_bien/maison/logement/bail.html",locals())
@@ -320,7 +318,8 @@ def create_bail(request, numM, numLogement, numLocataire):
             numLocataire = locataire,
             numLogement = logement,
             dateDebut = dateDebut,
-            dateFin = dateFin
+            dateFin = dateFin,
+            loyer = loyer
         )
         location.save()
         
