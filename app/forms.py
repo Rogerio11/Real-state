@@ -65,16 +65,10 @@ class LogementForm(ModelForm):
                     "class": "form-control"
                 }
         ))
-    loyer = forms.IntegerField(label="Loyer",
-                widget=forms.TextInput(
-                attrs={
-                    "class": "form-control"
-                }
-        ))
     
     class Meta:
         model = Logement
-        fields= ['typeL','superficie','loyer','photoL1','photoL2','photoL3']
+        fields= ['typeL','superficie','photoL1','photoL2','photoL3']
     
 
 class LocataireForm(ModelForm):
@@ -130,6 +124,7 @@ class PaiementForm(ModelForm):
                     "class": "form-control"
                 }
             ))
+    
     class Meta:
         model = Paiement
         fields = ['montantP']
@@ -165,10 +160,16 @@ class LocationForm(ModelForm):
                 "class": "form-control"
             }
         ))
+    loyer = forms.IntegerField(label="Loyer",
+                widget=forms.TextInput(
+                attrs={
+                    "class": "form-control"
+                }
+        ))    
 
     class Meta:
         model = Location
-        fields=['dateDebut','dateFin']
+        fields=['dateDebut','dateFin','loyer']
 
 
 class UpdateBail(ModelForm):
@@ -178,19 +179,3 @@ class UpdateBail(ModelForm):
             }
         ))
     
-    
-class LocationForm(ModelForm):
-    dateDebut = forms.DateField(label="Date debut bail (mm/dd/yyyy):",widget=forms.TextInput(
-            attrs={
-                "class": "form-control"
-            }
-        ))
-    dateFin = forms.DateField(label="Date fin bail (mm/dd/yyyy):",widget=forms.TextInput(
-            attrs={
-                "class": "form-control"
-            }
-        ))
-    
-    class Meta:
-        model = Location
-        fields=['dateDebut','dateFin']
