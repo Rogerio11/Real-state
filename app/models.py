@@ -17,7 +17,7 @@ class Maison(models.Model):
     def upload_path(self, filename):
         return 'media/%s_%s' % (self.created_at.strftime("%Y%m%d_%H%M%S"), filename)
     
-    photoM1 = models.FileField(upload_to=upload_path, blank = True, null=True, default='img/show.jpg')
+    photoM1 = models.FileField(upload_to=upload_path, blank = True, null=True)
     photoM2 = models.FileField(upload_to=upload_path, blank = True, null=True)
     photoM3 = models.FileField(upload_to=upload_path, blank = True, null=True)    
     def __str__(self):
@@ -45,7 +45,6 @@ class Logement(models.Model):
     numLogement = models.AutoField(primary_key=True)
     typeL = models.CharField(max_length=200, choices=TYPE_CHOICES)
     superficie = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(19999999999)])
-    loyer = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(19999999999)])
     numM = models.ForeignKey(Maison, on_delete=models.CASCADE, db_column='numM')
     created_at = models.DateTimeField(auto_now_add=True)  
     def upload_path(self, filename):
@@ -92,6 +91,7 @@ class Location(models.Model):
     idLocation = models.AutoField(primary_key=True)
     numLocataire = models.ForeignKey(Locataire, on_delete=models.CASCADE, db_column='numLocataire')
     numLogement = models.ForeignKey(Logement, on_delete=models.CASCADE, db_column='numLogement')
+    loyer = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(19999999999)])
     dateDebut = models.DateField(auto_now=False, auto_now_add=False)
     dateFin = models.DateField( auto_now=False, auto_now_add=False)
     
